@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request, session
+from flask import jsonify
 from database import db_class
 import os
 
@@ -9,8 +10,10 @@ my_db_connect = db_class.mysql_connector(
     "localhost", "root", "password", "nptel_management"
 )
 
+
 # Set a secret key
 app.secret_key = "BAD_SECRET_KEY"
+
 
 
 # done
@@ -43,7 +46,10 @@ def login():
 # Admin homepage route
 @app.route("/admin")
 def admin_homepg():
-    return render_template("admin_homepg.html")
+    std_enrolled,courses_taken = my_db_connect.admin_stat_home()
+    table_contents = my_db_connect.toppers_table()
+    print(std_enrolled,courses_taken)
+    return render_template("admin_home_stat.html",total_students = std_enrolled[0],total_courses = courses_taken[0],table_contents = table_contents)
 
 
 # Student homepage route
@@ -173,6 +179,7 @@ def statistics():
 @app.route("/verification")
 def verification():
     std_marks_info = my_db_connect.student_details()
+    print(std_marks_info)
     return render_template("admin_verification.html", std_marks_info=std_marks_info)
 
 
@@ -203,22 +210,30 @@ def verify_cert(email_id,c_code):
 
     text_details = my_db_connect.get_ver_details_admin(email_id, c_code)
 
+    print(text_details)
+
     return render_template(
         "cert_check.html",
         filename=file_name,
-        details=text_details
+        details=text_details,
+        c_code = c_code
     )
 
-def correct(email_id,c_code,verified_marks):
+@app.route("/execute_function", methods= ["POST"])
+def correct():    
+    print(request.form)
+    email_id = session["username"]
+    c_name = request.form['courseName']
+    c_code = request.form['courseCode']
+    verified_marks = request.form['marks']
+
+
+    print((email_id,c_code,verified_marks))
     my_db_connect.update_cert_correct(email_id,c_code)
     my_db_connect.ins_nptel_marks(email_id,c_code,verified_marks)
     print('succesfully added to correct db')
-
-def wrong(email_id,c_code,verified_marks):
-    my_db_connect.update_cert_wrong(email_id,c_code)
-    print('succesfully added to wrong db')
-
+    return jsonify("succesfully added to correct db")
 
 # Run the app
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8000)

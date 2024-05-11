@@ -218,13 +218,13 @@ class mysql_connector:
     # get the name sem sub marks from table
     def student_details(self):
         # write query
-        query = """select s.st_name, s.sem, c.c_name, ce.marks from student s join certificate ce on ce.email_id = s.email_id join course c on c.c_code = ce.c_code order by s.sem;"""
+        query = """select s.st_name, s.sem, c.c_name, ce.marks,ce.verified,s.email_id,c.c_code from student s join certificate ce on ce.email_id = s.email_id join course c on c.c_code = ce.c_code order by s.sem;"""
         # execute query
         self.cursor.execute(query)
         # fetch the query
         details = self.cursor.fetchall()
         # convert to req formatt
-        order = ("name", "sem", "c_name", "ce_marks")
+        order = ("name", "sem", "c_name", "ce_marks", "verified","email_id","c_code")
         lis = []
         for data in details:
             dic = {}
@@ -362,7 +362,7 @@ class mysql_connector:
     
     def get_ver_details_admin(self,email,c_code):
         query_det = f'''
-        select s.regno,cour.c_name,marks from certificate cer
+        select s.regno,cour.c_name,marks,s.email_id from certificate cer
         join student s on s.email_id = cer.email_id
         join course cour on cour.c_code = cer.c_code
         where cer.email_id = '{email}' and cer.c_code = '{c_code}';
@@ -398,6 +398,66 @@ class mysql_connector:
         self.cursor.execute(query_cor)
         self.db.commit()
 
+    #ADMIN HOME STAT PAGE
+    def admin_stat_home(self):
+        query_det = f'''
+        select count(distinct(email_id)) from certificate;
+        '''
+        # excetue and fetch the query
+        self.cursor.execute(query_det)
+        students_enrolled = self.cursor.fetchone()
+
+        query_det = f'''
+        select count(distinct(email_id)) from certificate;
+        '''
+        # excetue and fetch the query
+        self.cursor.execute(query_det)
+        course_taken = self.cursor.fetchone()
+
+        return students_enrolled,course_taken
+    
+    def toppers_table(self):
+        
+        semester = [2,4]
+        map = {}
+        for sem in semester:
+            query_det = f'''
+            SELECT s.st_name, c.c_code, c.marks
+            FROM student s
+            JOIN certificate c ON s.email_id = c.email_id
+            JOIN set_course sc on sc.c_code = c.c_code
+            WHERE sc.sem = {sem} and c.marks = (select max(marks) from certificate where c_code = c.c_code);
+            '''
+            self.cursor.execute(query_det)
+            toppers_table = self.cursor.fetchall()
+            map[sem] = toppers_table
+        print(map)
+        return map
+
+    def course_name(self):
+        
+        query_det = f'''
+        SELECT DISTINCT(c_name) 
+        FROM course c 
+        '''
+        self.cursor.execute(query_det)
+        course_available = self.cursor.fetchall()
+        return course_available
+    
+    def course_details(self,course_name):
+        
+        query_det = f'''
+        select c_name,c_code,weeks,nptel_link
+        from course where c_name =  '{course_name}';
+        '''
+
+        self.cursor.execute(query_det)
+        course_details = self.cursor.fetchall()
+        print(course_details)
+        return course_details
+        
+
+
 
 
 my_db_connect = mysql_connector("localhost", "root", "password", "nptel_management")
@@ -422,7 +482,7 @@ my_db_connect = mysql_connector("localhost", "root", "password", "nptel_manageme
 
 # my_db_connect.get_course_details(['Database Management Systems','Mechatronics'])
 
-# my_db_connect.student_details()
+#my_db_connect.student_details()
 
 # my_db_connect.admin_verifcation_std_list()
 
@@ -438,4 +498,8 @@ my_db_connect = mysql_connector("localhost", "root", "password", "nptel_manageme
 
 # my_db_connect.get_ver_details_admin('rahul.sharma@ssn.edu.in','IT101')
 
-my_db_connect.update_cert_correct('rahul.sharma@ssn.edu.in','IT101')
+# my_db_connect.update_cert_correct('rahul.sharma@ssn.edu.in','IT101')
+
+#my_db_connect.toppers_table()
+
+my_db_connect.course_details('Software Testing')
