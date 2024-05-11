@@ -63,6 +63,8 @@ c_code varchar(20),
 verified_marks integer,
 ssn_marks integer,
 verified_date datetime,
+sem integer,
+acc_year varchar(15)
 PRIMARY KEY (EMAIL_ID,C_CODE)
 );
 
@@ -124,6 +126,51 @@ Insert into Course values ('noc24-cs15', 'Blockchain and its Applications', 12, 
 Insert into Course values ('noc24-cs27', 'Foundations of Cyber Physical Systems', 12, 'https://nptel.ac.in/courses/106105241', 'Yes');
 Insert into Course values ('noc24-cs31', 'Information Security - 5 - Secure Systems Engineering', 8, 'https://nptel.ac.in/courses/106106199', 'Yes');
 Insert into Course values ('noc24-cs48', 'Systems and Usable Security', 4, 'https://nptel.ac.in/courses/106106234', 'Yes');
+
+-- Course 1 - noc24-cs47 - Software Testing
+-- 5 students with random verified marks (out of 100)
+Insert into NPTEL_MARKS (email_id, c_code, verified_marks, ssn_marks, verified_date, sem, acc_year) values 
+('nitish2210197@ssn.edu.in', 'noc24-cs47', 85, 78, '2024-05-01', '4', '2023-2024'),
+('ranjeev2210215@ssn.edu.in', 'noc24-cs47', 92, 85, '2024-05-02', '4', '2023-2024'),
+('student3@example.com', 'noc24-cs47', 78, 72, '2024-05-03', '4', '2023-2024'),
+('student4@example.com', 'noc24-cs47', 65, 59, '2024-05-04', '4', '2023-2024'),
+('student5@example.com', 'noc24-cs47', 70, 64, '2024-05-05', '4', '2023-2024');
+
+-- Course 2 - noc24-cs01 - Foundations of Cryptography
+-- 5 students with random verified marks (out of 100)
+Insert into NPTEL_MARKS (email_id, c_code, verified_marks, ssn_marks, verified_date, sem, acc_year) values 
+('nitish2210197@ssn.edu.in', 'noc24-cs01', 88, 81, '2024-05-06', '4', '2023-2024'),
+('ranjeev2210215@ssn.edu.in', 'noc24-cs01', 94, 87, '2024-05-07', '4', '2023-2024'),
+('student3@example.com', 'noc24-cs01', 76, 69, '2024-05-08', '4', '2023-2024'),
+('student4@example.com', 'noc24-cs01', 82, 75, '2024-05-09', '4', '2023-2024'),
+('student5@example.com', 'noc24-cs01', 90, 83, '2024-05-10', '4', '2023-2024');
+
+-- Course 3 - noc24-cs04 - Privacy and Security in Online Social Media
+-- 5 students with random verified marks (out of 100)
+Insert into NPTEL_MARKS (email_id, c_code, verified_marks, ssn_marks, verified_date, sem, acc_year) values 
+('nitish2210197@ssn.edu.in', 'noc24-cs04', 85, 78, '2024-05-11', '4', '2023-2024'),
+('ranjeev2210215@ssn.edu.in', 'noc24-cs04', 92, 85, '2024-05-12', '4', '2023-2024'),
+('student3@example.com', 'noc24-cs04', 78, 72, '2024-05-13', '4', '2023-2024'),
+('student4@example.com', 'noc24-cs04', 65, 59, '2024-05-14', '4', '2023-2024'),
+('student5@example.com', 'noc24-cs04', 70, 64, '2024-05-15', '4', '2023-2024');
+
+-- Course 4 - noc24-cs07 - Secure Computation: Part I
+-- 5 students with random verified marks (out of 100)
+Insert into NPTEL_MARKS (email_id, c_code, verified_marks, ssn_marks, verified_date, sem, acc_year) values 
+('nitish2210197@ssn.edu.in', 'noc24-cs07', 88, 81, '2024-05-16', '4', '2023-2024'),
+('ranjeev2210215@ssn.edu.in', 'noc24-cs07', 94, 87, '2024-05-17', '4', '2023-2024'),
+('student3@example.com', 'noc24-cs07', 76, 69, '2024-05-18', '4', '2023-2024'),
+('student4@example.com', 'noc24-cs07', 82, 75, '2024-05-19', '4', '2023-2024'),
+('student5@example.com', 'noc24-cs07', 90, 83, '2024-05-20', '4', '2023-2024');
+
+-- Course 5 - noc24-cs15 - Blockchain and its Applications
+-- 5 students with random verified marks (out of 100)
+Insert into NPTEL_MARKS (email_id, c_code, verified_marks, ssn_marks, verified_date, sem, acc_year) values 
+('nitish2210197@ssn.edu.in', 'noc24-cs15', 85, 78, '2024-05-21', '4', '2023-2024'),
+('ranjeev2210215@ssn.edu.in', 'noc24-cs15', 92, 85, '2024-05-22', '4', '2023-2024'),
+('student3@example.com', 'noc24-cs15', 78, 72, '2024-05-23', '4', '2023-2024'),
+('student4@example.com', 'noc24-cs15', 65, 59, '2024-05-24', '4', '2023-2024'),
+('student5@example.com', 'noc24-cs15', 70, 64, '2024-05-25', '4', '2023-2024');
 
 (select sem from student where email_id = 'rahul.sharma@ssn.edu.in');
 select c.c_name from course c

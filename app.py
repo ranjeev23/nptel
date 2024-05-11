@@ -234,6 +234,7 @@ def correct():
     print('succesfully added to correct db')
     return jsonify("succesfully added to correct db")
 
+
 # Run the app
 if __name__ == "__main__":
     app.run(debug=True, port=8000)
