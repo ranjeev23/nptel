@@ -455,9 +455,145 @@ class mysql_connector:
         course_details = self.cursor.fetchall()
         print(course_details)
         return course_details
+    
+    #statistics db query
+    def all_set_course(self):
+        print('')
+        print('this is the data for all the set courses id 1')
+        print('')
+        query_det = f'''
+        SELECT DISTINCT(c.c_name),c.c_code
+        FROM course c 
+        join set_course ce on ce.c_code = c.c_code;
+        '''
+
+        self.cursor.execute(query_det)
+        course_details = self.cursor.fetchall()
+        print(course_details)
+        return course_details
+    
+    def get_details_course(self,c_code):
+        print('')
+        print('This is the data for available courses id 2')
+        print('')
+        query_det = f'''
+        select * from course
+        where c_code = '{c_code}';
+        '''
+
+        self.cursor.execute(query_det)
+        course_details = self.cursor.fetchall()
+        print(course_details)
+        return course_details
+    
+    def tot_avg_max(self,c_code):
+        print('')
+        print('This is the data for tot average mark id 3')
+        print('')
+        query_det = f'''
+        SELECT COUNT(email_id),AVG(verified_marks),MAX(verified_marks) AS total_students
+        FROM NPTEL_MARKS
+        WHERE c_code = '{c_code}';
+        '''
+
+        self.cursor.execute(query_det)
+        records = self.cursor.fetchall()
+        print(records)
+        return records
+    
+    def toppers(self,c_code,sem):
+        print('')
+        print('This is the data for toppers given sem and course code id 4')
+        print('')
+        query_det = f'''
+        SELECT nm.email_id, nm.verified_marks,nm.ssn_marks ,nm.acc_year, nm.sem
+        FROM NPTEL_MARKS nm
+        WHERE nm.c_code = '{c_code}' -- Replace 'noc24-cs47' with your desired course code
+        AND nm.sem = '{sem}' -- Replace '4' with your desired semester
+        ORDER BY nm.verified_marks DESC
+        LIMIT 10;
+        '''
+
+        self.cursor.execute(query_det)
+        records = self.cursor.fetchall()
+        print(records)
+        return records
         
+    def bar_graph(self,c_code):
+        print('')
+        print('This is the data for bar graph chart id 5')
+        print('')
+        query_det = f'''
+        SELECT 
+            acc_year, 
+            COUNT(DISTINCT email_id) AS num_students_enrolled 
+        FROM NPTEL_MARKS 
+        WHERE c_code = '{c_code}' 
+        GROUP BY acc_year;
+        '''
 
+        self.cursor.execute(query_det)
+        records = self.cursor.fetchall()
+        print(records)
+        return records
+    
+    def pie_chart(self,c_code):
+        print('')
+        print('This is the data for pie chart id 6')
+        print('')
+        query_det = f'''
+        SELECT 
+            sem, 
+            COUNT(DISTINCT email_id) AS num_students_enrolled 
+        FROM NPTEL_MARKS 
+        WHERE c_code = '{c_code}' 
+        GROUP BY sem;
+        '''
 
+        self.cursor.execute(query_det)
+        records = self.cursor.fetchall()
+        print(records)
+        return records
+    
+    def slacked_bar(self,c_code):
+        print('')
+        print('This is the data for slacked bar graph id 7')
+        print('')
+        query_det = f'''
+        SELECT 
+            acc_year,
+            SUM(CASE WHEN verified_marks >= 0 AND verified_marks < 50 THEN 1 ELSE 0 END) / COUNT(*) * 100 AS percentage_0_to_50,
+            SUM(CASE WHEN verified_marks >= 50 AND verified_marks < 80 THEN 1 ELSE 0 END) / COUNT(*) * 100 AS percentage_50_to_80,
+            SUM(CASE WHEN verified_marks >= 80 AND verified_marks <= 100 THEN 1 ELSE 0 END) / COUNT(*) * 100 AS percentage_80_to_100
+        FROM NPTEL_MARKS
+        WHERE c_code = '{c_code}'
+        GROUP BY acc_year;
+        '''
+
+        self.cursor.execute(query_det)
+        records = self.cursor.fetchall()
+        print(records)
+        return records
+    
+    def mul_line_chart(self,c_code):
+        print('')
+        print('This is the data for multiple line chart id 8')
+        print('')
+
+        query_det = f'''
+        SELECT
+            acc_year,
+            sem,
+            AVG(verified_marks) AS average_mark
+        FROM NPTEL_MARKS
+        where c_code = '{c_code}'
+        GROUP BY acc_year, sem;
+        '''
+
+        self.cursor.execute(query_det)
+        records = self.cursor.fetchall()
+        print(records)
+        return records
 
 
 my_db_connect = mysql_connector("localhost", "root", "password", "nptel_management")
@@ -502,4 +638,14 @@ my_db_connect = mysql_connector("localhost", "root", "password", "nptel_manageme
 
 #my_db_connect.toppers_table()
 
-my_db_connect.course_details('Software Testing')
+#my_db_connect.course_details('Software Testing')
+
+my_db_connect.all_set_course()
+my_db_connect.get_details_course('noc24-cs47')
+my_db_connect.toppers_table()
+my_db_connect.tot_avg_max('noc24-cs47')
+my_db_connect.toppers('noc24-cs47',4)
+my_db_connect.bar_graph('noc24-cs47')
+my_db_connect.pie_chart('noc24-cs47')
+my_db_connect.slacked_bar('noc24-cs47')
+my_db_connect.mul_line_chart('noc24-cs47')
