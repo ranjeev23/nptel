@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+    rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+  <style>
+    .number-count {
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+    color:#474242;
+    margin-bottom:15px;
+  }
+    body {
+      background-color: #c3ced79d;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      padding: 0px;
+      color: #474242;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+
+    h1 {
+      font-size: 40px;
+      margin-top: 20px;
+      color: #474242;
+      opacity: 1;
+      text-align:center;
+      justify-content:center;
+      align-items:center;
+
+    }
+
+    h2 {
+      font-size: 30px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #474242;
+      opacity: 1;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .navbar {
+      background-color: #fff;
+      margin-top: 0;
+      width: 100%;
+    }
+
+    .navbar-brand img {
+      height: 50px;
+      margin-right: 15px;
+    }
+
+    .side-navbar {
+      height: 100%;
+      width: 250px;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: -250px;
+      background-color: #fff;
+      padding-top: 20px;
+      transition: 0.5s;
+    }
+
+    .side-navbar a {
+      padding: 16px;
+      text-decoration: none;
+      font-size: 18px;
+      color: #474242;
+      display: block;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+
+    .side-navbar a:hover {
+      color: #474242;
+    }
+
+    .toggle-area {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 20px;
+      background-color: transparent;
+      z-index: 2;
+      transition: 0.5s;
+    }
+
+    .toggle-area:hover+.side-navbar,
+    .side-navbar:hover,
+    .toggle-area.active+.side-navbar {
+      left: 0;
+    }
+
+    .toggle-area:hover,
+    .side-navbar:hover,
+    .toggle-area.active {
+      cursor: pointer;
+    }
+
+    .dashboard-container {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .statistics-container {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    h3 {
+      font-size: 30px;
+      margin-top: 20px;
+      color: #474242;
+      opacity: 1;
+    }
+
+    .profile-pic {
+      max-width: 100%;
+      height: auto;
+      border-radius: 50%;
+      margin-bottom: 20px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+      margin-top :10px;
+      margin-bottom:10px;
+
+    }
+
+    button {
+      margin-top: 20px;
+    }
+
+    /* Additional styles for filters */
+    .filters-container {
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      padding: 20px;
+      color: #000;
+      margin-bottom: 20px;
+    }
+
+    .filters label,
+    .filters select,
+    .filters input {
+      margin-right: 10px;
+    }
+
+    /* Button styles */
+    .btn-primary {
+      background-color: #9fb0be;
+      color: #fff;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 12px;
+      align-items: center;
+      justify-content: right;
+    }
+
+    .btn-primary:hover {
+      background-color: #9fb0be;
+    }
+
+    .btn-success {
+      background-color: #9fb0be;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+
+    }
+
+    .btn-success:hover {
+      background-color: #9fb0be;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="toggle-area" onclick="toggleSidebar()"></div>
+
+  <div class="side-navbar">
+    <div class="admin-info">
+      <i class="fas fa-user-circle fa-9x"></i> <!-- Adjust the size of the icon as needed -->
+      <p>Welcome Admin</p>
+    </div>
+    <a href="{{ url_for('registration') }}"><i class="fas fa-upload"></i> Upload Courses</a>
+    <a href="{{url_for('results')}}"><i class="fas fa-check-circle"></i> Results Verification</a>
+    <a href="{{url_for('statistics')}}"><i class="fas fa-chart-line"></i> View Statistics</a>
+  </div>
+
+
+  <div class="content">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <button class="navbar-toggler" type="button" data-toggle="offcanvas">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img src="{{ url_for('static', filename='logo.png') }}">
+      </a>
+    </nav>
+    <div class="container mt-4 container-carousel">
+      <h1>Welcome to SSN NPTEL Examinations Management System</h1>
+      <h2> Admin Home Page</h2>
+      <h1>Student Results</h1>
+      <div class="filters-container">
+        <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Modal 1</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <h5>Add Filters</h5>
+                <form action="#" method="POST">
+                  <label for="label1">Digital ID:</label>
+                  <input type="text" id="label1" name="label1"><br><br>
+          
+                  <label for="label2">Subject Name:</label>
+                  <input type="text" id="label2" name="label2"><br><br>
+          
+                  <label for="label3">Marks:</label>
+                  <input type="text" id="label3" name="label3"><br><br>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Apply Filters</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Filters Applied
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Filter</button>
+        <div class="content">
+          <table id="studentResultsTable">
+            <thead>
+              <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Subject</th>
+                <th>Score</th>
+                <th>Verification Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Academic year 2024-2025 -->
+              <tr data-digital-id="123" data-student-name="John Doe" data-sub-code="MATH101" data-sub-name="Mathematics"
+                data-verification-link="verify_cert">
+                <tr>Academic Year 2024-2025</tr>
+                <td>123</td>
+                <td>John Doe</td>
+                <td>Mathematics</td>
+                <td>90.5</td>
+                <td><a href="verify_cert">Go to Verification</a></td>
+              </tr>
+              <tr data-digital-id="124" data-student-name="Alice Smith" data-sub-code="PHY101" data-sub-name="Physics"
+                data-verification-link="verify_cert">
+                <td>124</td>
+                <td>Alice Smith</td>
+                <td>Physics</td>
+                <td>85.0</td>
+                <td><a href="verify_cert">Go to Verification</a></td>
+              </tr>
+              <tr data-digital-id="125" data-student-name="Bob Johnson" data-sub-code="CHEM101" data-sub-name="Chemistry"
+                data-verification-link="verify_cert">
+                <td>125</td>
+                <td>Bob Johnson</td>
+                <td>Chemistry</td>
+                <td>78.5</td>
+                <td><a href="verify_cert">Go to Verification</a></td>
+              </tr>
+              <tr data-digital-id="126" data-student-name="Eve Brown" data-sub-code="BIO101" data-sub-name="Biology"
+                data-verification-link="verify_cert">
+                <td>126</td>
+                <td>Eve Brown</td>
+                <td>Biology</td>
+                <td>92.0</td>
+                <td><a href="verify_cert">Go to Verification</a></td>
+              </tr>
+              <tr data-digital-id="127" data-student-name="Charlie Green" data-sub-code="ENG101" data-sub-name="English"
+                data-verification-link="verify_cert">
+                <td>127</td>
+                <td>Charlie Green</td>
+                <td>English</td>
+                <td>88.5</td>
+                <td><a href="verify_cert">Go to Verification</a></td>
+              </tr>
+            </tbody>
+            </table>
+            <table>
+              <tr>Academic Year 2023-2024</tr>
+              <thead>
+                <tr>
+                  <th>Student ID</th>
+                  <th>Name</th>
+                  <th>Subject</th>
+                  <th>Score</th>
+                  <th>Verification Status</th>
+                </tr>
+              </thead>
+              <tr data-digital-id="128" data-student-name="David White" data-sub-code="MATH101" data-sub-name="Mathematics"
+                data-verification-link="verify_cert">
+                <td>128</td>
+                <td>David White</td>
+                <td>Mathematics</td>
+                <td>86.0</td>
+                <td><a href="verify_cert">Go to Verification</a></td>
+              </tr>
+              <tr data-digital-id="129" data-student-name="Grace Black" data-sub-code="PHY101" data-sub-name="Physics"
+                data-verification-link="verify_cert">
+                <td>129</td>
+                <td>Grace Black</td>
+                <td>Physics</td>
+                <td>75.5</td>
+                <td><a href="verify_cert">Go to Verification</a></td>
+              </tr>
+              <tr data-digital-id="130" data-student-name="Frank Wilson" data-sub-code="CHEM101" data-sub-name="Chemistry"
+                data-verification-link="verify_cert">
+                <td>130</td>
+                <td>Frank Wilson</td>
+                <td>Chemistry</td>
+                <td>79.0</td>
+                <td><a href="verify_cert">Go to Verification</a></td>
+              </tr>
+              <tr data-digital-id="131" data-student-name="Hannah King" data-sub-code="BIO101" data-sub-name="Biology"
+                data-verification-link="verify_cert">
+                <td>131</td>
+                <td>Hannah King</td>
+                <td>Biology</td>
+                <td>90.5</td>
+                <td><a href="verify_cert">Go to Verification</a></td>
+              </tr>
+              <tr data-digital-id="132" data-student-name="Ivy Lee" data-sub-code="ENG101" data-sub-name="English"
+                data-verification-link="verify_cert">
+                <td>132</td>
+                <td>Ivy Lee</td>
+                <td>English</td>
+                <td>83.5</td>
+                <td><a href="verify_cert">Go to Verification</a></td>
+              </tr>
+            </tbody>
+          </table>
+          <button onclick="exportToExcel()" class="btn btn-success">Download Excel</button>
+        </div>
+      
+  <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="filterModalLabel">Filter Student Results</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="filterModalLabel">Filter Student Results</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="digitalId">Digital ID:</label>
+                <input type="text" class="form-control" id="digitalId">
+              </div>
+              <div class="form-group">
+                <label for="studentName">Student Name:</label>
+                <input type="text" class="form-control" id="studentName">
+              </div>
+              <div class="form-group">
+                <label for="subjectName">Subject Name:</label>
+                <input type="text" class="form-control" id="subjectName">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button class="btn btn-primary" onclick="applyFilters()">Apply Filters</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <script>
+
+    function toggleSidebar() {
+      const sideNavbar = document.querySelector('.side-navbar');
+      const toggleArea = document.querySelector('.toggle-area');
+      sideNavbar.classList.toggle('active');
+      toggleArea.classList.toggle('active');
+    }
+
+    function openFilterModal() {
+      $('#filterModal').modal('show');
+    }
+
+    function applyFilters() {
+  const digitalId = document.getElementById('digitalId').value()
+  const studentName = document.getElementById('studentName').value()
+  const subjectName = document.getElementById('subjectName').value()
+
+  $('#studentResultsTable tbody tr').each(function () {
+    const row = $(this);
+    const rowDigitalId = row.attr('data-digital-id');
+    const rowStudentName = row.attr('data-student-name');
+    const rowSubjectName = row.attr('data-sub-name');
+
+    const digitalIdFilter = !digitalId || rowDigitalId.includes(digitalId);
+    const studentNameFilter = !studentName || rowStudentName.includes(studentName);
+    const subjectNameFilter = !subjectName || rowSubjectName.includes(subjectName);
+
+    if (digitalIdFilter || studentNameFilter || subjectNameFilter) {
+      row.show();
+    } else {
+      row.hide();
+    }
+  });
+
+  $('#filterModal').modal('hide');
+}
+
+  
+
+    function exportToExcel() {
+      const table = document.getElementById('studentResultsTable');
+      const rows = [];
+      table.querySelectorAll('tr').forEach(row => {
+        const rowData = [];
+        row.querySelectorAll('td').forEach(cell => {
+          rowData.push(cell.textContent.trim());
+        });
+        rows.push(rowData.join(','));
+      });
+      const csvContent = rows.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'student_results.csv';
+      link.click();
+    }
+  </script>
+
+
+  <!-- Include jQuery and Bootstrap JS files -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha384-LyK3MmvZ9Jg9Q2s49ea2NGp9Dg1b7XiqIT4IJuL2D8mSzTgT2P9yn0kV12YY/cir"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+    integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CGp8KXU0n8e+rB"
+    crossorigin="anonymous"></script>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+</html>
