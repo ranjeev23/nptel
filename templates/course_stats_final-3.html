@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+
+
+  <style>
+    .number-count {
+      font-size: 36px;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+      color: #474242;
+      margin-bottom: 15px;
+    }
+    
+    body {
+      background-color: #c3ced79d;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      padding: 0px;
+      color: #474242;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+
+    h1 {
+      font-size: 40px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #474242;
+      opacity: 1;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+    }
+
+    h2 {
+      font-size: 30px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #474242;
+      opacity: 1;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .navbar {
+      background-color: #fff;
+      margin-top: 0;
+      width: 100%;
+    }
+
+    .navbar-brand img {
+      height: 50px;
+      margin-right: 15px;
+    }
+
+    .side-navbar {
+      height: 100%;
+      width: 250px;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: -250px;
+      background-color: #fff;
+      padding-top: 20px;
+      transition: 0.5s;
+    }
+
+    .side-navbar a {
+      padding: 16px;
+      text-decoration: none;
+      font-size: 18px;
+      color: #474242;
+      display: block;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+
+    .side-navbar a:hover {
+      color: #474242;
+    }
+
+    .toggle-area {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 20px;
+      background-color: transparent;
+      z-index: 2;
+      transition: 0.5s;
+    }
+
+    .toggle-area:hover+.side-navbar,
+    .side-navbar:hover,
+    .toggle-area.active+.side-navbar {
+      left: 0;
+    }
+
+    .toggle-area:hover,
+    .side-navbar:hover,
+    .toggle-area.active {
+      cursor: pointer;
+    }
+
+    h3 {
+      font-size: 30px;
+      margin-top: 5px;
+      color: #474242;
+      opacity: 1;
+      margin-left: 25px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 90%;
+      justify-content: center;
+      align-items: center;
+      border-radius: 8px;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 4px;
+      text-align: left;
+      color: #000;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      color: #000;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    button {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      background-color: #f1f1f1;
+      color: #474242;
+      font-size: 18px;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    h4 {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #474242;
+      opacity: 1;
+      margin-left: 25px;
+    }
+
+    input {
+      font-size: 15px;
+      margin-left: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+      display: flex;
+    }
+
+    .card-container {
+      display: flex;
+      justify-content: space-between;
+      /* Adjust as needed */
+    }
+
+    .card {
+      flex: 0 0 calc(50% - 20px);
+      /* Adjust card width as needed */
+      margin-bottom: 20px;
+      background-color: #f1f1f1;
+      color: #fff;
+      padding: 10px;
+      margin-right: 25px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    h5 {
+      color: #474242;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      font-size: 25px;
+      font-style: bold;
+      padding: 20px;
+    }
+
+    .course-profile-container {
+      background-color: #f1f1f1;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 20px;
+      width: 96.2%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    select {
+      margin-top: 8px;
+      padding: 20px;
+      width: 80%;
+      align-items: center;
+      justify-content: center;
+    }
+
+    admin-info {
+    margin-bottom: 20px; /* Adjust margin as needed */
+    text-align: center;
+    margin-left:30px; /* Center-align text */
+  }
+
+  .admin-info i {
+    display: block;
+    margin: auto; /* Center the icon horizontally */
+    margin-bottom: 10px;
+    margin-left:30px;
+   } /* Adjust margin to vertically center the icon */
+
+   p{
+    margin-left:33px;
+    font-size:20px;
+   }
+    .chart-container {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 20px;
+  height: 400px; /* Fixed height for all chart containers */
+  display: flex;
+  justify-content: center; /* Center align horizontally */
+  align-items: center; /* Center align vertically */
+}
+
+.canvas-container {
+  height: 100%; /* Ensure canvas fills parent height */
+}
+
+@media (max-width: 768px) {
+  .chart-container {
+    height: 300px; /* Decrease height on smaller screens */
+  }
+}
+
+@media (max-width: 576px) {
+  .chart-container {
+    height: 250px; /* Further decrease height on even smaller screens */
+  }
+}
+
+
+
+
+  </style>
+</head>
+<body>
+  <div class="toggle-area" onclick="toggleSidebar()"></div>
+
+    <div class="side-navbar">
+      <div class="admin-info">
+        <i class="fas fa-user-circle fa-9x"></i> <!-- Adjust the size of the icon as needed -->
+        <p>Welcome Admin</p>
+      </div>
+      <a href="{{ url_for('registration') }}"><i class="fas fa-upload"></i> Upload Courses</a>
+      <a href="{{url_for('results')}}"><i class="fas fa-check-circle"></i> Results Verification</a>
+      <a href="{{url_for('statistics')}}"><i class="fas fa-chart-line"></i> View Statistics</a>
+    </div>
+
+  
+  <div class="content">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <button class="navbar-toggler" type="button" data-toggle="offcanvas">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img src="{{ url_for('static', filename='logo.png') }}">
+      </a>
+    </nav>
+    
+    <h1>Welcome to SSN NPTEL Examinations Management System</h1>
+    <h2>Course Statistics</h2>
+    <div class="container">
+      <select id="courseSelector" class="form-control mb-3" style="width: 60%;margin:auto;height:50px;padding:10px;" onchange="getCourseDetails()">
+        <option value="None">Select the course to view the course statistics.</option>
+        {% for course in set_courses %}
+            <option value="{{ course[1] }}">{{ course[0] }}</option>
+        {% endfor %}
+    </select>
+
+      <h3>Course Profile</h3>
+      <div class="course-profile-container">
+        {% if available_courses %}
+          {% set course_data = available_courses[0] %}
+          <h4>Course Name: <span id="courseName">{{ course_data[1] }}</span></h4>
+          <h4>Course Code: <span id="courseCode">{{ course_data[0] }}</span></h4>
+          <h4>Credits: <span id="credits">{{ course_data[2] }}</span></h4>
+          <h4>Course Link: <span id="courseLink">{{ course_data[3] }}</span></h4>
+        {% else %}
+          <p>No course data available.</p>
+        {% endif %}
+      </div>
+      <div class="subject-stats">
+        {% if score_count %}
+         <!--The sql query over here should fetch as the sum , avg and max marks,else data will be displayed as tuples of the counts,marks -->
+          <p>Total Number of Students: <span id="totalStudents">{{ score_count[0] }}</span></p>
+          <p>Average Marks: <span id="averageMarks">{{ score_count[1] }}</span></p>
+          <p>Maximum Marks: <span id="maxMarks">{{ score_count[2] }}</span></p>
+        {% else %}
+          <p>No score count data available.</p>
+        {% endif %}
+      </div>
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+              <div class="chart-container" style="height: 400px;">
+                <canvas id="lineChart"></canvas>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="chart-container" style="height: 400px;">
+                <canvas id="pieChart"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+                <div class="chart-container" style="height: 400px;">
+                    <canvas id="barChart50to80"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="chart-container" style="height: 400px;">
+                    <canvas id="barChart80to100"></canvas>
+                </div>
+            </div>
+          </div>
+      <button id="viewToppersBtn" class="btn btn-primary">View Toppers</button>
+
+ 
+    <div id="toppersTable">
+        <h2>Topper Details</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Email ID</th>
+              <th>Actual Mark</th>
+              <th>Obtained Mark</th>
+              <th>Course</th>
+              <th>Credits</th>
+            </tr>
+          </thead>
+          <tbody id="toppersTableBody">
+            <!-- Table rows will be dynamically inserted here -->
+          </tbody>
+        </table>
+      </div>
+      
+  </div>
+
+    </div>
+
+    <script>
+
+function getCourseDetails() {
+    var selectedCourse = document.getElementById('courseSelector').value;
+    if (selectedCourse !== 'None') {
+        // Make AJAX request to server
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/course_details', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    // Handle successful response
+                    var courseDetails = JSON.parse(xhr.responseText);
+                    // Update course details on the page
+                    document.getElementById('courseName').innerText = courseDetails.name;
+                    document.getElementById('courseCode').innerText = courseDetails.code;
+                    document.getElementById('credits').innerText = courseDetails.credits;
+                    document.getElementById('courseLink').innerText = courseDetails.link;
+                    document.getElementById('score_count').innerText=courseDetails.score_count 
+                    document.getElementById('enrollment_graph').innerText=courseDetails.enrollment_grap
+                    document.getElementById('sem_enrollment').innerText=courseDetails.sem_enrollment 
+                    document.getElementById('avg_marks_data').innerText=courseDetails.avg_marks_data
+                    document.getElementById('toppers_data').innerText=courseDetails.toppers_data
+                } else {
+                    // Handle error
+                    console.error('Error: ' + xhr.status);
+                }
+            }
+        };
+        xhr.send(JSON.stringify({ course: selectedCourse }));
+    }
+}
+
+  // Course Profile Data
+  var courseProfile = {{ available_courses | tojson }};
+
+  // Extracting course data
+  var courseName = courseProfile[1];
+  var courseCode = courseProfile[0];
+  var courseDuration = courseProfile[2];
+  var courseLink = courseProfile[3];
+
+  // Total Number of Students, Average Marks, Maximum Marks Data
+  var scoreData = {{ score_count | tojson }};
+  var totalStudents = scoreData[0];
+  var averageMarks = scoreData[1];
+  var maxMarks = scoreData[2];
+
+
+// Line Chart for Enrollment
+var enrollmentData = {{ enrollment_graph | tojson }};
+
+// Extracting years and data for odd and even semesters
+var enrollmentYears = enrollmentData.map(function(item) {
+  return item.year;
+});
+
+var oddSemEnrollment = enrollmentData.map(function(item) {
+  return item.odd_semester;
+});
+
+var evenSemEnrollment = enrollmentData.map(function(item) {
+  return item.even_semester;
+});
+
+// Line Chart
+var ctx = document.getElementById('lineChart').getContext('2d');
+var lineChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: enrollmentYears,
+    datasets: [{
+      label: 'Odd Semester Enrollment',
+      data: oddSemEnrollment,
+      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+      borderColor: 'rgba(255, 99, 132, 1)',
+      borderWidth: 1,
+      borderDash: [5, 5]
+    },
+    {
+      label: 'Even Semester Enrollment',
+      data: evenSemEnrollment,
+      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+      borderColor: 'rgba(54, 162, 235, 1)',
+      borderWidth: 1
+    }]
+  },
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        },
+        scaleLabel: {
+          display: true,
+          labelString: 'Enrollment Counts'
+        }
+      }],
+      xAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: 'Years'
+        }
+      }]
+    }
+  }
+});
+
+
+
+
+  var semEnrollmentData = {{ sem_enrollment | tojson }};
+
+  // Extracting labels and data for the pie chart
+  var semesters = semEnrollmentData.map(function(item) {
+    return item[0];
+  });
+
+  var semesterCounts = semEnrollmentData.map(function(item) {
+    return item[1];
+  });
+
+  // Pie Chart
+  var ctx2 = document.getElementById('pieChart').getContext('2d');
+  var pieChart = new Chart(ctx2, {
+    type: 'pie',
+    data: {
+      labels: semesters, // Use extracted semesters as labels
+      datasets: [{
+        label: 'Enrollment by Semester',
+        data: semesterCounts, // Use extracted counts as data
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+          // Add more colors if needed
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+        plugins: {
+            labels: {
+                render: 'value', // Display percentage value
+                fontSize: 14,
+                fontColor: '#fff', // Text color
+                fontStyle: 'bold'
+            }
+        }
+    }
+
+  });
+
+  // Line Chart for Mark Share 50-80
+var markShare50to80Data = {{ markshare_50_80 | tojson }};
+
+// Extracting years and data for 50-80 mark range
+var markShare50to80Years = markShare50to80Data.map(function(item) {
+  return item[0];
+});
+
+var markShare50to80OddSem = markShare50to80Data.map(function(item) {
+  return item[1];
+});
+
+var markShare50to80EvenSem = markShare50to80Data.map(function(item) {
+  return item[2];
+});
+
+// Line Chart
+var ctx3 = document.getElementById('barChart50to80').getContext('2d');
+var barChart50to80 = new Chart(ctx3, {
+  type: 'bar',
+  data: {
+    labels: markShare50to80Years,
+    datasets: [{
+      label: 'Odd Semester',
+      data: markShare50to80OddSem,
+      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+      borderColor: 'rgba(255, 99, 132, 1)',
+      borderWidth: 1
+    },
+    {
+      label: 'Even Semester',
+      data: markShare50to80EvenSem,
+      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+      borderColor: 'rgba(54, 162, 235, 1)',
+      borderWidth: 1
+    }]
+  },
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        },
+        scaleLabel: {
+          display: true,
+          labelString: 'Enrollment Counts'
+        }
+      }],
+      xAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: 'Years'
+        }
+      }]
+    }
+  }
+});
+
+
+
+// Line Chart for Mark Share 80-100
+var markShare80to100Data = {{ markshare_80_100 | tojson }};
+
+// Extracting years and data for 80-100 mark range
+var markShare80to100Years = markShare80to100Data.map(function(item) {
+  return item[0];
+});
+
+var markShare80to100OddSem = markShare80to100Data.map(function(item) {
+  return item[1];
+});
+
+var markShare80to100EvenSem = markShare80to100Data.map(function(item) {
+  return item[2];
+});
+
+// Line Chart
+var ctx4 = document.getElementById('barChart80to100').getContext('2d');
+var barChart80to100 = new Chart(ctx4, {
+  type: 'bar',
+  data: {
+    labels: markShare80to100Years,
+    datasets: [{
+      label: 'Odd Semester',
+      data: markShare80to100OddSem,
+      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+      borderColor: 'rgba(255, 99, 132, 1)',
+      borderWidth: 1
+    },
+    {
+      label: 'Even Semester',
+      data: markShare80to100EvenSem,
+      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+      borderColor: 'rgba(54, 162, 235, 1)',
+      borderWidth: 1
+    }]
+  },
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        },
+        scaleLabel: {
+          display: true,
+          labelString: 'Enrollment Counts'
+        }
+      }],
+      xAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: 'Years'
+        }
+      }]
+    }
+  }
+});
+
+
+
+
+
+
+
+
+
+
+  document.getElementById('viewToppersBtn').addEventListener('click', function() {
+    var toppersTable = document.getElementById('toppersTable');
+    if (toppersTable.style.display === 'none') {
+      toppersTable.style.display = 'block';
+    } else {
+      toppersTable.style.display = 'none';
+    }
+  });
+
+  // JavaScript code to populate the toppers table dynamically
+  document.getElementById('viewToppersBtn').addEventListener('click', function() {
+    var toppersTable = document.getElementById('toppersTable');
+    var toppersTableBody = document.getElementById('toppersTableBody');
+    toppersTableBody.innerHTML = ''; // Clear existing table rows
+    if (toppersTable.style.display === '' || toppersTable.style.display === 'none') {
+      toppersTable.style.display = 'block';
+      // Populate table rows dynamically
+      var toppersData = {{ toppers_data | tojson }};
+      toppersData.forEach(function(topper) {
+        var row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${topper[0]}</td>
+          <td>${topper[1]}</td>
+          <td>${topper[2]}</td>
+          <td>${topper[3]}</td>
+          <td>${topper[4]}</td>
+        `;
+        toppersTableBody.appendChild(row);
+      });
+    } else {
+      toppersTable.style.display = 'none';
+    }
+  });
+
+  document.getElementById('downloadChart').addEventListener('click', function() {
+            html2canvas(document.getElementById('myChart')).then(function(canvas) {
+                canvas.toBlob(function(blob) {
+                    saveAs(blob, 'chart.png'); // Save as PNG file
+                });
+            });
+        });
+
+</script>

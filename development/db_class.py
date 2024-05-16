@@ -289,56 +289,56 @@ class mysql_connector:
                     dict[years_tup[0]].append(records)
 
         print(dict)
+    class Student:
+        def get_verified_details(self, email):
+            # complete details of verified certificates from user
+            query_std = f"""
+            select cour.c_name,verified_marks,ssn_marks 
+            from nptel_marks n
+            join certificate cer on n.email_id = cer.email_id 
+            join course cour on cer.c_code = cour.c_code
+            where verified = 'ver' and n.email_id = '{email}'
+            """
+            print(query_std)
+            # excetue and fetch the query
+            self.cursor.execute(query_std)
+            verified_details = self.cursor.fetchall()
 
-    def get_verified_details(self, email):
-        # complete details of verified certificates from user
-        query_std = f"""
-        select cour.c_name,verified_marks,ssn_marks 
-        from nptel_marks n
-        join certificate cer on n.email_id = cer.email_id 
-        join course cour on cer.c_code = cour.c_code
-        where verified = 'ver' and n.email_id = '{email}'
-        """
-        print(query_std)
-        # excetue and fetch the query
-        self.cursor.execute(query_std)
-        verified_details = self.cursor.fetchall()
+            print(verified_details)
+            return verified_details
 
-        print(verified_details)
-        return verified_details
+        def get_nverified_details(self, email):
+            # complete details of verified certificates from user
+            query_std = f"""
+            select cour.c_code,cour.c_name,marks 
+            from certificate cer 
+            join course cour on cer.c_code = cour.c_code
+            where verified = 'nver' and cer.email_id ='{email}' 
+            """
+            print(query_std)
+            # excetue and fetch the query
+            self.cursor.execute(query_std)
+            nverified_details = self.cursor.fetchall()
 
-    def get_nverified_details(self, email):
-        # complete details of verified certificates from user
-        query_std = f"""
-        select cour.c_code,cour.c_name,marks 
-        from certificate cer 
-        join course cour on cer.c_code = cour.c_code
-        where verified = 'nver' and cer.email_id ='{email}' 
-        """
-        print(query_std)
-        # excetue and fetch the query
-        self.cursor.execute(query_std)
-        nverified_details = self.cursor.fetchall()
+            print(nverified_details)
+            return nverified_details
 
-        print(nverified_details)
-        return nverified_details
+        def get_rej_details(self, email):
+            # complete details of verified certificates from user
+            query_std = f"""
+            select r.std_email_id,c.c_name,c.c_code,teacher_email_id,issue 
+            from rejected r
+            join course c on c.c_code = r.c_code
+            join teacher t on t.email_id = teacher_email_id
+            where std_email_id = '{email}'
+            """
+            print(query_std)
+            # excetue and fetch the query
+            self.cursor.execute(query_std)
+            rej_details = self.cursor.fetchall()
 
-    def get_rej_details(self, email):
-        # complete details of verified certificates from user
-        query_std = f"""
-        select r.std_email_id,c.c_name,c.c_code,teacher_email_id,issue 
-        from rejected r
-        join course c on c.c_code = r.c_code
-        join teacher t on t.email_id = teacher_email_id
-        where std_email_id = '{email}'
-        """
-        print(query_std)
-        # excetue and fetch the query
-        self.cursor.execute(query_std)
-        rej_details = self.cursor.fetchall()
-
-        print(rej_details)
-        return rej_details
+            print(rej_details)
+            return rej_details
     
     def ins_certificate(self,email_id,c_code,marks,qr_code_link,certificate_link):
 
@@ -401,14 +401,14 @@ class mysql_connector:
     #ADMIN HOME STAT PAGE
     def admin_stat_home(self):
         query_det = f'''
-        select count(distinct(regno)) from nptel_marks;
+        select count(distinct(email_id)) from certificate;
         '''
         # excetue and fetch the query
         self.cursor.execute(query_det)
         students_enrolled = self.cursor.fetchone()
 
         query_det = f'''
-        select count(distinct(c_code)) from nptel_marks;
+        select count(distinct(email_id)) from certificate;
         '''
         # excetue and fetch the query
         self.cursor.execute(query_det)
@@ -417,16 +417,22 @@ class mysql_connector:
         return students_enrolled,course_taken
     
     def toppers_table(self):
-        query_det = f'''
-        SELECT s.st_name, n.c_code, c.c_name, n.verified_marks
-        FROM student s
-        JOIN nptel_marks n ON s.regno = n.regno
-        JOIN course c on c.c_code = n.c_code
-        WHERE n.verified_marks = (select max(verified_marks) from nptel_marks where c_code = n.c_code);
-        '''
-        self.cursor.execute(query_det)
-        toppers_table = self.cursor.fetchall()
-        return toppers_table
+        
+        semester = [2,4]
+        map = {}
+        for sem in semester:
+            query_det = f'''
+            SELECT s.st_name, c.c_code, c.marks
+            FROM student s
+            JOIN certificate c ON s.email_id = c.email_id
+            JOIN set_course sc on sc.c_code = c.c_code
+            WHERE sc.sem = {sem} and c.marks = (select max(marks) from certificate where c_code = c.c_code);
+            '''
+            self.cursor.execute(query_det)
+            toppers_table = self.cursor.fetchall()
+            map[sem] = toppers_table
+        print(map)
+        return map
 
     def course_name(self):
         
@@ -438,11 +444,11 @@ class mysql_connector:
         course_available = self.cursor.fetchall()
         return course_available
     
-    def course_details(self,course_name):
+    def course_details(self,c_code):
         
         query_det = f'''
         select c_name,c_code,weeks,nptel_link
-        from course where c_name =  '{course_name}';
+        from course where c_code =  '{c_code}';
         '''
 
         self.cursor.execute(query_det)
@@ -511,7 +517,11 @@ class mysql_connector:
         records = self.cursor.fetchall()
         print(records)
         return records
-        
+    
+    def convert_to_dicts(self,input_list):
+        output = [{"year": str(year), "odd_semester": odd, "even_semester": even} for year, even, odd in input_list]
+        return output
+    
     def enrollment_graph(self,c_code):
         print('')
         print('This is the data for double line graph chart id 5')
@@ -530,6 +540,8 @@ class mysql_connector:
 
         self.cursor.execute(query_det)
         records = self.cursor.fetchall()
+        records = self.convert_to_dicts(records)
+        print('@@@@@@@')
         print(records)
         return records
     
@@ -615,8 +627,77 @@ class mysql_connector:
             print("Error:", e)
             # self.db.rollback()
 
+    def many_std_insert(self,data:list):
+        print("student DATTAAAA")
+        print(data)
+        regno = []
+        values = []
+        for record in data:
+            if record[1] not in regno:
+                regno.append(record[1])
+                tup = (record[1],record[2])
+                values.append(tup)
+        insert_st = 'INSERT INTO STUDENT(regno,st_name) values (%s,%s)'
+        # print(values)
+        for value in values:
+            print(value)
+            self.cursor.execute(insert_st,value)
+        self.db.commit()
+        # self.db.close()
+        return True
+    
+    def many_course_insert(self,data):
+        print("DATTAAAA")
+        print(data)
+        regno = []
+        values = []
+        for record in data:
+            #record[4] => code record[5] => c_name
+            if record[4] not in regno:
+                regno.append(record[4])
+                tup = (record[4],record[5])
+                values.append(tup)
+        insert_st = 'INSERT INTO COURSE(c_code,c_name) values (%s,%s)'
+        self.cursor.executemany(insert_st,values)
+        self.db.commit()
+        # self.db.close()
+        return True
+    
+    def many_nptelmark_ins(self,data,sem,year):
+        print("DATTAAAA")
+        print(data)
+        regno_c_code = []
+        values = []
+        for record in data:
+            print(type(record[1]),type(record[4]),type(record[7]),type(sem),type(year))
+            print(record[1],record[4],record[7],sem,year)
+            #record[1] => regno record[4] => c_code
+            if record[1] not in regno_c_code:
+                regno_c_code.append((record[1],record[4]))
+                tup = (record[1],record[4],record[7],record[3],year,sem)
+                values.append(tup)
+        # print(values)
+        insert_st = 'INSERT INTO nptel_marks(regno,c_code,verified_marks,sem,acc_year,sem_type) values (%s,%s,%s,%s,%s,%s)'
+        for value in values:
+            print(value)
+            
+            self.cursor.execute(insert_st,value)
+        self.db.commit()
+        # self.db.close()
+        return True
+    
+    def facade_insert(self,data,sem,year):
+        '''
+        inserts the values into student table,course and nptel_marks table
+        '''
+        a = self.many_std_insert(data.copy())
+        if a:
+            b = self.many_nptelmark_ins(data.copy(),sem,year)
+        if b:
+            c = self.many_course_insert(data.copy())
+        print(a,b,c)
+        return True
 
-        
 
 
 my_db_connect = mysql_connector("localhost", "root", "password", "nptel_management")
@@ -672,3 +753,5 @@ my_db_connect = mysql_connector("localhost", "root", "password", "nptel_manageme
 # my_db_connect.pie_chart('noc24-cs47')
 # my_db_connect.slacked_bar('noc24-cs47')
 # my_db_connect.mul_line_chart('noc24-cs47')
+
+# my_db_connect.many_std([[1.0, 185002001, 'Aadhithya B.Kailash', 'IV', 'UITOL91', 'Programming in Java', 3.0, 97, 'nan'], [2.0, 185002003, 'Adithya R', 'IV', 'UCSOL73', 'Social Networks', 3.0, 83, 'nan']])

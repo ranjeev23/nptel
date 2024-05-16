@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Selection</title>
+</head>
+
+<body>
+    <h1>Select Data Type:</h1>
+    <button id="studentBtn">Students</button>
+    <button id="courseBtn">Courses</button>
+    <button id="marksBtn">Marks</button>
+
+    <div id="dataDisplay">
+        <!-- Data will be displayed here -->
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#studentBtn, #courseBtn, #marksBtn').click(function () {
+                var dataType = $(this).text().toLowerCase();
+                $.ajax({
+                    url: '/get_data?type=' + dataType,
+                    success: function (data) {
+                        $('#dataDisplay').empty();
+                        if (data.error) {
+                            $('#dataDisplay').append('<p>' + data.error + '</p>');
+                        } else {
+                            $.each(data[dataType + '_data'], function (index, value) {
+                                if (dataType === 'student') {
+                                    $('#dataDisplay').append('<p>' + value[0] + ' - ' + value[1] + '</p>');
+                                } else if (dataType === 'course') {
+                                    $('#dataDisplay').append('<p>' + value[0] + ' - ' + value[1] + '</p>');
+                                } else if (dataType === 'marks') {
+                                    $('#dataDisplay').append('<p>' + value[0] + ' - ' + value[1] + ' (' + value[2] + ')</p>');
+                                }
+                            });
+                        }
+                    },
+                    error: function () {
+                        $('#dataDisplay').empty().append('<p>Error retrieving data.</p>');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

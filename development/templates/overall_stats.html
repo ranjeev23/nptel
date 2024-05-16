@@ -1,0 +1,456 @@
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+    rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+  <style>
+
+
+
+    .number-count {
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+    color:#474242;
+    margin-bottom:15px;
+  }
+    body {
+      background-color: #c3ced79d;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      padding: 0px;
+      color: #474242;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+
+    h1 {
+      font-size: 40px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #474242;
+      opacity: 1;
+      text-align:center;
+      justify-content:center;
+      align-items:center;
+
+    }
+
+    h2 {
+      font-size: 30px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #474242;
+      opacity: 1;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .navbar {
+      background-color: #fff;
+      margin-top: 0;
+      width: 100%;
+    }
+
+    .navbar-brand img {
+      height: 50px;
+      margin-right: 15px;
+    }
+
+    .side-navbar {
+      height: 100%;
+      width: 250px;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: -250px;
+      background-color: #fff;
+      padding-top: 20px;
+      transition: 0.5s;
+    }
+
+    .side-navbar a {
+      padding: 16px;
+      text-decoration: none;
+      font-size: 18px;
+      color: #474242;
+      display: block;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+
+    .side-navbar a:hover {
+      color: #474242;
+    }
+
+    .toggle-area {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 20px;
+      background-color: transparent;
+      z-index: 2;
+      transition: 0.5s;
+    }
+
+    .toggle-area:hover+.side-navbar,
+    .side-navbar:hover,
+    .toggle-area.active+.side-navbar {
+      left: 0;
+    }
+
+    .toggle-area:hover,
+    .side-navbar:hover,
+    .toggle-area.active {
+      cursor: pointer;
+    }
+
+
+    h3 {
+      font-size: 30px;
+      margin-top: 5px;
+      color: #474242;
+      opacity: 1;
+      align-items:center;
+      justify-content: center;
+      text-align:center;
+    }
+
+ 
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      justify-content: center;
+      align-items:center;
+      border-radius:8px;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+      color:#000
+    }
+
+    th {
+      background-color: #f2f2f2;
+      color:#000
+      
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    button {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      background-color: #f1f1f1;
+      color: #474242;
+      font-size: 18px;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 10px;
+    }
+
+    .form-control {
+      margin-top: 10px;
+      font:20px;
+      
+    }
+
+    h4{
+        font-size: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #000;
+      opacity: 1;
+      
+    }
+
+    input{
+        font-size:15px;
+        margin-left:5px;
+        padding:10px;
+        margin-bottom:10px;
+        display:flex;
+
+    }
+
+    .card-container {
+  display: flex;
+  justify-content: space-between; /* Adjust as needed */
+}
+
+.card {
+  flex: 0 0 calc(30% - 20px); /* Adjust card width as needed */
+  margin-bottom: 20px;
+  background-color:#474242;
+  color:#fff;
+}
+
+h6{
+  color:#474242;
+  text-align:center;
+  justify-content:center;
+  align-items: center;
+  font-size:30px;
+  font-style: bold;
+
+}
+
+.container-left {
+  width: 100%; /* Extend throughout the main container */
+  float: left;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #f1f1f1;
+}
+
+.container-right {
+  width: 50%; /* Occupy 50% width */
+  float: left;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  background-color: #f1f1f1;
+  margin-right: 0px;
+}
+
+
+    .enclosing-container {
+      display: flex;
+    }
+
+    admin-info {
+    margin-bottom: 20px; /* Adjust margin as needed */
+    text-align: center;
+    margin-left:30px; /* Center-align text */
+  }
+
+  .admin-info i {
+    display: block;
+    margin: auto; /* Center the icon horizontally */
+    margin-bottom: 10px;
+    margin-left:30px;
+   } /* Adjust margin to vertically center the icon */
+
+   p{
+    margin-left:33px;
+    font-size:20px;
+   }
+
+  </style>
+</head>
+<body>
+  <div class="toggle-area" onclick="toggleSidebar()"></div>
+
+  
+  
+
+  <div class="content">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <button class="navbar-toggler" type="button" data-toggle="offcanvas">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img src="{{ url_for('static', filename='logo.png') }}">
+      </a>
+    </nav>
+    <h1>Welcome to SSN NPTEL Examinations Management System</h1>
+    <h2>Overall Statistics</h2>
+    <div id="filterContainer" style="display: block;">
+      <div class="container">
+        <!-- Academic year and semester selection form -->
+        <form id="filterForm">
+          <div class="form-group">
+            <label for="academic-year">Select the academic year:</label>
+            <select class="form-control" id="academic-year" name="academic_year">
+              <!-- Render academic year options dynamically -->
+              {% for year in academic_years %}
+              <option value="{{ year }}">{{ year }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        
+          <div class="form-group">
+            <label for="semester">Select the semester:</label>
+            <select class="form-control" id="semester" name="semester">
+              <!-- Render semester options dynamically -->
+              {% for sem in semesters %}
+              <option value="{{ sem }}">{{ sem }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        
+
+    <div id="resultContainer" style="display: none;">
+      <div class="container">
+        <div class="container enclosing-container">
+          <div class="container" id="resultContent">
+            <!-- Academic year and semester display -->
+            <h2>Academic Year: {{ selected_academic_year }}</h2>
+            <h2>Semester: {{ selected_semester }}</h2>
+            <!-- Total students and courses -->
+            <h4>Total Students: {{ total_students }}</h4>
+            <h4>Total Courses: {{ total_courses }}</h4>
+            <div class="container-left">
+              <!-- Top 10 Scores table -->
+              <h2>Top 10 Scores</h2>
+              <table>
+                <!-- Table content -->
+              </table>
+            </div>
+            <div class="container-right">
+              <!-- Graphs -->
+              <h2>Student-Course Mapping</h2>
+              <div class="chart-container">
+                <canvas id="courseDistributionChart"></canvas>
+              </div>
+              <h2>Student Mark Trends</h2>
+              <div class="chart-container">
+                <canvas id="marksDistributionChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    $(document).ready(function () {
+    // Function to handle form submission
+    $("#filterForm").submit(function (event) {
+        event.preventDefault(); // Prevent the default form submission
+        var year = $("#academic-year").val(); // Get the selected academic year
+        var semester = $("#semester").val(); // Get the selected semester
+        fetchData(year, semester); // Call the fetchData function with selected year and semester
+    });
+
+    // Function to fetch data from the Flask backend
+    function fetchData(year, semester) {
+        $.ajax({
+            url: '/fetch_data', // Flask route URL to fetch data
+            method: 'POST', // Using POST method to send data
+            data: {
+                academic_year: year, // Sending selected academic year
+                semester: semester // Sending selected semester
+            },
+            success: function (response) {
+                renderCharts(response); // Render charts with the fetched data
+                showResults(); // Show the results container
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching data:", error); // Log error if occurred
+                // You can handle the error here if needed
+            }
+        });
+    }
+
+    
+
+    // Function to show the results container
+    function showResults() {
+        $("#filterContainer").hide(); // Hide the filter form container
+        $("#resultContainer").fadeIn(); // Fade in the result container
+    }
+});
+
+      function renderCharts(data) {
+        //
+        var courseDistributionData = Object.values(data.course_distribution);
+        var courseDistributionLabels = Object.keys(data.course_distribution);
+        var courseColors = generateRandomColors(courseDistributionData.length); // Generate random colors based on the number of courses
+        var courseDistributionCtx = document.getElementById('courseDistributionChart').getContext('2d');
+        var courseDistributionChart = new Chart(courseDistributionCtx, {
+          type: 'doughnut',
+          data: {
+            labels: courseDistributionLabels,
+            datasets: [{
+              data: courseDistributionData,
+              backgroundColor: courseColors, // Assign generated random colors
+              borderColor: courseColors, // Assign generated random colors
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false
+          }
+        });
+
+        // Render bar chart for marks distribution
+        var marksDistributionData = Object.values(data.marks_distribution);
+        var marksDistributionLabels = Object.keys(data.marks_distribution);
+        var marksDistributionCtx = document.getElementById('marksDistributionChart').getContext('2d');
+        var marksDistributionChart = new Chart(marksDistributionCtx, {
+          type: 'bar',
+          data: {
+            labels: marksDistributionLabels,
+            datasets: [{
+              label: 'Marks Distribution',
+              data: marksDistributionData,
+              backgroundColor: 'rgba(54, 162, 235, 0.5)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true
+                }
+              }]
+            }
+          }
+        });
+      }
+      
+      // Function to generate random colors
+      function generateRandomColors(numColors) {
+        var colors = [];
+        for (var i = 0; i < numColors; i++) {
+          var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16); // Generate random hex color
+          colors.push(randomColor);
+        }
+        return colors;
+      }
+
+      function showResults() {
+        $("#filterContainer").hide(); // Hide filter form container
+        $("#resultContainer").fadeIn(); // Fade in result container
+      }
+
+      
+    });
+  </script>
+</body>
+
+</html>

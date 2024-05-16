@@ -234,6 +234,42 @@ def correct():
     print('succesfully added to correct db')
     return jsonify("succesfully added to correct db")
 
+##TEST APP
+
+@app.route('/samp')
+def samp():
+    # Sample data (replace with actual data from your database)
+    course = 'UITOL91'
+    available_courses = my_db_connect.all_set_course()
+    score_count = my_db_connect.tot_avg_max(course)[0]  # Example: (Total Students, Average Marks, Maximum Marks)
+    enrollment_graph = my_db_connect.enrollment_graph(course)  # Example: (Year, Enrollment Count)
+    sem_enrollment = my_db_connect.pie_chart(course)  # Example: (Semester, Enrollment Count)
+    markshare = my_db_connect.silver_score_graph(course) # Example: (Course, 0-50%, 50-80%, 80-100%)
+    avg_marks_data = my_db_connect.gold_score_graph(course)  # Example: (Year, Semester, Average Marks)
+    toppers_data = my_db_connect.toppers(course)
+    print('available_courses,score_count,enrollment_graph,sem_enrollment,markshare,avg_marks_data,toppers_data')
+    print(available_courses,score_count,enrollment_graph,sem_enrollment,markshare,avg_marks_data,toppers_data)
+
+    return render_template('course_stats_final.html', set_courses=available_courses,available_courses=available_courses, score_count=score_count,
+                           enrollment_graph=enrollment_graph, sem_enrollment=sem_enrollment,
+                           markshare=markshare, avg_marks_data=avg_marks_data, toppers_data=toppers_data)
+
+@app.route('/post-course',methods= ["POST"])
+def redirect_course():
+    print('in')
+    available_courses = my_db_connect.all_set_course()
+    score_count = my_db_connect.tot_avg_max('noc24-cs47')[0]  # Example: (Total Students, Average Marks, Maximum Marks)
+    enrollment_graph = my_db_connect.bar_graph('noc24-cs47')  # Example: (Year, Enrollment Count)
+    sem_enrollment = my_db_connect.pie_chart('noc24-cs47')  # Example: (Semester, Enrollment Count)
+    markshare = my_db_connect.slacked_bar('noc24-cs47') # Example: (Course, 0-50%, 50-80%, 80-100%)
+    avg_marks_data = my_db_connect.mul_line_chart('noc24-cs47')  # Example: (Year, Semester, Average Marks)
+    toppers_data = my_db_connect.toppers('noc24-cs47',4)
+
+    return render_template('course_stats_final.html', set_courses=available_courses,available_courses=available_courses, score_count=score_count,
+                           enrollment_graph=enrollment_graph, sem_enrollment=sem_enrollment,
+                           markshare=markshare, avg_marks_data=avg_marks_data, toppers_data=toppers_data)
+
+
 
 # Run the app
 if __name__ == "__main__":
