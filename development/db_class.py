@@ -632,11 +632,18 @@ class mysql_connector:
         print(data)
         regno = []
         values = []
+        query_det = f'''
+        select regno from student;
+        '''
+        self.cursor.execute(query_det)
+        old_course=[course[0] for course in self.cursor.fetchall()]
+        print(old_course)
         for record in data:
             if record[1] not in regno:
                 regno.append(record[1])
                 tup = (record[1],record[2])
-                values.append(tup)
+                if record[1] not in old_course:
+                    values.append(tup)
         insert_st = 'INSERT INTO STUDENT(regno,st_name) values (%s,%s)'
         # print(values)
         for value in values:
@@ -651,12 +658,19 @@ class mysql_connector:
         print(data)
         regno = []
         values = []
+        query_det = f'''
+        select c_code from course;
+        '''
+        self.cursor.execute(query_det)
+        old_course=[course[0] for course in self.cursor.fetchall()]
+        print(old_course)
         for record in data:
             #record[4] => code record[5] => c_name
             if record[4] not in regno:
                 regno.append(record[4])
                 tup = (record[4],record[5])
-                values.append(tup)
+                if record[4] not in old_course:
+                    values.append(tup)
         insert_st = 'INSERT INTO COURSE(c_code,c_name) values (%s,%s)'
         self.cursor.executemany(insert_st,values)
         self.db.commit()
@@ -697,9 +711,154 @@ class mysql_connector:
             c = self.many_course_insert(data.copy())
         print(a,b,c)
         return True
+    
+    def getUniqueRegnoCountBySemTypeAndYear(self,acc_year,sem_type):
+        print('')
+        print('This is the data for the unique regno count')
+        print('')
 
+        query_det = f'''
+        SELECT COUNT(DISTINCT regno) AS unique_regno_count
+        FROM NPTEL_MARKS
+        WHERE sem_type = '{sem_type}' AND acc_year = '{acc_year}';
+        '''
 
+        self.cursor.execute(query_det)
+        records = self.cursor.fetchall()
+        print(records)
+        return records
+    
+    def getUniqueCourseCodeCountBySemTypeAndYear(self,acc_year,sem_type):
+        print('')
+        print('This is the data for the unique course code given year and sem type')
+        print('')
 
+        query_det = f'''
+        SELECT COUNT(DISTINCT c_code) AS unique_course_code_count
+        FROM NPTEL_MARKS
+        WHERE sem_type = '{sem_type}' AND acc_year = '{acc_year}';
+        '''
+
+        self.cursor.execute(query_det)
+        records = self.cursor.fetchall()
+        print(records)
+        return records
+    
+    def getEnrolledCountGroupedByYearAndSemType(self):
+        print('')
+        print('This is the data for the unique enrolled count given year and sem_type')
+        print('')
+
+        query_det = f'''
+        SELECT 
+            acc_year,
+            SUM(CASE WHEN sem_type = 'odd' THEN count ELSE 0 END) AS odd_sem_count,
+            SUM(CASE WHEN sem_type  = 'even' THEN count ELSE 0 END) AS even_sem_count
+        FROM 
+            (SELECT 
+                acc_year,
+                sem_type,
+                COUNT(DISTINCT regno) AS count
+            FROM 
+                NPTEL_MARKS
+            GROUP BY 
+                acc_year, 
+                sem_type) AS subquery
+        GROUP BY 
+            acc_year
+        ORDER BY 
+            acc_year;
+        '''
+
+        self.cursor.execute(query_det)
+        records = self.cursor.fetchall()
+        print(records)
+        return records
+
+    def getSemesterWiseCountByYearAndSemType(self,acc_year,sem_type):
+        print('')
+        print('This is the data for unique year given year and sem_type')
+        print('')
+
+        query_det = f'''
+        SELECT 
+            sem,
+            COUNT(distinct(regno)) AS count
+        FROM 
+            NPTEL_MARKS
+        WHERE 
+            acc_year = '{acc_year}' 
+            AND sem_type = '{sem_type}'
+        GROUP BY 
+            sem
+        ORDER BY 
+            sem;
+        '''
+
+        self.cursor.execute(query_det)
+        records = self.cursor.fetchall()
+        print(records)
+        return records
+
+    def getDistinctAcademicYears(self):
+        print('')
+        print('This is the data for distinct accademic years available')
+        print('')
+
+        query_det = f'''
+        select distinct(acc_year) from nptel_marks;
+        '''
+
+        self.cursor.execute(query_det)
+        records = self.cursor.fetchall()
+        print(records)
+        return records
+    
+    def getDistinctSemesterTypes(self):
+        print('')
+        print('This is the data for different sem types available')
+        print('')
+
+        query_det = f'''
+        select distinct(sem_type) from nptel_marks;
+        '''
+
+        self.cursor.execute(query_det)
+        records = self.cursor.fetchall()
+        print(records)
+        return records
+    
+    def getToppersgivenSemandYear(self,sem,year):
+        print('')
+        print('This is the data for different toppers')
+        print('')
+        print(sem,year)
+        query_det = f'''
+        SELECT 
+    nm.regno,
+    s.st_name,
+    c.c_name,
+    nm.verified_marks,
+    nm.acc_year,
+    nm.sem_type
+FROM 
+    NPTEL_MARKS nm 
+    JOIN student s ON nm.regno = s.regno
+    JOIN course c ON c.c_code = nm.c_code
+WHERE 
+    nm.acc_year = '{year}' -- Specify the desired academic year
+    AND nm.sem_type = '{sem}' -- Specify the desired semester type
+ORDER BY
+    nm.verified_marks desc
+LIMIT 5;
+        '''
+
+        self.cursor.execute(query_det)
+        records = self.cursor.fetchall()
+        print(records)
+        return records
+    
+    
 my_db_connect = mysql_connector("localhost", "root", "password", "nptel_management")
 
 # my_db_connect.create_table('sample2',{'name':'TEXT','age':'TEXT'})
@@ -755,3 +914,12 @@ my_db_connect = mysql_connector("localhost", "root", "password", "nptel_manageme
 # my_db_connect.mul_line_chart('noc24-cs47')
 
 # my_db_connect.many_std([[1.0, 185002001, 'Aadhithya B.Kailash', 'IV', 'UITOL91', 'Programming in Java', 3.0, 97, 'nan'], [2.0, 185002003, 'Adithya R', 'IV', 'UCSOL73', 'Social Networks', 3.0, 83, 'nan']])
+
+# my_db_connect.getEnrolledCountGroupedByYearAndSemType()
+# my_db_connect.getSemesterWiseCountByYearAndSemType('2021-22','odd')
+# my_db_connect.getUniqueCourseCodeCountBySemTypeAndYear('2021-22','odd')
+# my_db_connect.getUniqueRegnoCountBySemTypeAndYear('2021-22','odd')
+# my_db_connect.getDistinctAcademicYears()
+# my_db_connect.getDistinctSemesterTypes()
+
+my_db_connect.getToppersgivenSemandYear('odd','2021-22')

@@ -1,0 +1,41 @@
+// document.getElementById('viewToppersBtn').addEventListener('click', function () {
+// var toppersTable = document.getElementById('toppersTable');
+// if (toppersTable.style.display === 'none') {
+// toppersTable.style.display = 'block';
+// } else {
+// toppersTable.style.display = 'none';
+// }
+// });
+
+// // JavaScript code to populate the toppers table dynamically
+// document.getElementById('viewToppersBtn').addEventListener('click', function () {
+// var toppersTable = document.getElementById('toppersTable');
+// var toppersTableBody = document.getElementById('toppersTableBody');
+// toppersTableBody.innerHTML = ''; // Clear existing table rows
+// if (toppersTable.style.display === '' || toppersTable.style.display === 'none') {
+// toppersTable.style.display = 'block';
+// // Populate table rows dynamically
+// var toppersData = {{ toppers_data | tojson}};
+// toppersData.forEach(function (topper) {
+// var row = document.createElement('tr');
+// row.innerHTML = `
+// <td>${topper[0]}</td>
+// <td>${topper[1]}</td>
+// <td>${topper[2]}</td>
+// <td>${topper[3]}</td>
+// <td>${topper[4]}</td>
+// `;
+// toppersTableBody.appendChild(row);
+// });
+// } else {
+// toppersTable.style.display = 'none';
+// }
+// });
+
+// document.getElementById('downloadChart').addEventListener('click', function () {
+// html2canvas(document.getElementById('myChart')).then(function (canvas) {
+// canvas.toBlob(function (blob) {
+// saveAs(blob, 'chart.png'); // Save as PNG file
+// });
+// });
+// });

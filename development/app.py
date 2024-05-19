@@ -63,6 +63,57 @@ def upload_file():
 def success_excel():
     return render_template('succesful.html')
 
+
+@app.route('/test3',methods=['GET','POST'])
+def general_statistics():
+    if request.method == "GET":
+        course = 'UITOL91'
+        set_courses = my_db_connect.all_set_course()
+        score_count = my_db_connect.tot_avg_max(course)[0]  # Example: (Total Students, Average Marks, Maximum Marks)
+        enrollment_graph = my_db_connect.enrollment_graph(course)  # Example: (Year, Enrollment Count)
+        sem_enrollment = my_db_connect.pie_chart(course)  # Example: (Semester, Enrollment Count)
+        markshare_50_80 = my_db_connect.getEnrolledCountGroupedByYearAndSemType() # Example: (Course, 0-50%, 50-80%, 80-100%)
+        markshare_80_100 = my_db_connect.gold_score_graph(course)  # Example: (Year, Semester, Average Marks)
+        toppers_data = my_db_connect.toppers(course)
+
+        #real data 
+        acc_year = my_db_connect.getDistinctAcademicYears()
+        sem_type = my_db_connect.getDistinctSemesterTypes()
+
+        context = {
+            'acc_year': acc_year,
+            'sem_type': sem_type
+        }
+        return render_template('general_statistics.html', set_courses=set_courses, available_courses=set_courses,
+                            score_count=score_count, enrollment_graph=enrollment_graph, sem_enrollment=sem_enrollment,
+                            markshare_50_80=markshare_50_80, markshare_80_100=markshare_80_100,
+                                toppers_data=toppers_data,**context)
+    elif request.method == "POST":
+        course_selected = request.form['course_selected']
+        sem_selected = request.form['sem_selected']
+        print('!!!!!!')
+        print(course_selected)
+        print(sem_selected)
+
+        #real data 
+        acc_year = my_db_connect.getDistinctAcademicYears()
+        sem_type = my_db_connect.getDistinctSemesterTypes()
+        enrollment_count = my_db_connect.getUniqueRegnoCountBySemTypeAndYear(course_selected,sem_selected)
+        course_count = my_db_connect.getUniqueCourseCodeCountBySemTypeAndYear(course_selected,sem_selected)
+        markshare_50_80 = my_db_connect.getEnrolledCountGroupedByYearAndSemType()
+        sem_enrollment = my_db_connect.getSemesterWiseCountByYearAndSemType(course_selected,sem_selected)
+        toppers_data = my_db_connect.getToppersgivenSemandYear(sem_selected,course_selected)
+        print('ofvotr',toppers_data)
+        context = {
+            'acc_year': acc_year,
+            'sem_type': sem_type,
+            'enrollment_count': enrollment_count,
+            'course_count': course_count,
+            'markshare_50_80': markshare_50_80,
+            'sem_enrollment': sem_enrollment,
+            'toppers_data': toppers_data
+        }
+        return render_template('general_statistics.html', **context,post_request=True)
 # Sample data (replace with actual data from your database)
 # set_courses = [('Course A', "https://courseA.com"), ('Course B',)]
 # available_courses = [("Course A", "CS101", 3, "https://courseA.com"), ("Course B", "CS102", 4, "https://courseB.com")]
