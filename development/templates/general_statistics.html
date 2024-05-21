@@ -345,7 +345,7 @@
             {% if post_request %}
         <div class = 'container'>
             <div class="container">
-                <h3>Analysis of {{sem_type[0][0]}} Semesters in the Academic Year {{acc_year[0][0]}}</h3>
+                <h3>Analysis of {{selected_sem}} Semesters in the Academic Year {{selected_year}}</h3>
                 <h4>Count of Students: <span id="enrollement_count">{{ enrollment_count[0][0] }}</span></h4>
                 <h4>Count of Courses: <span id="course_count">{{ course_count[0][0] }}</span></h4>
             </div>
@@ -406,8 +406,11 @@
                 });
         
 
+            var selectedYear = "{{ selected_year }}";
+            var selectedSem = "{{ selected_sem }}";
 
-
+            console.log(selectedSem)
+            console.log(selectedYear)
 
             var semEnrollmentData = {{ sem_enrollment | tojson }};
 
@@ -451,16 +454,16 @@
             }]
             },
             options: {
-            plugins: {
-            labels: {
-            render: 'value', // Display percentage value
-            fontSize: 14,
-            fontColor: '#fff', // Text color
-            fontStyle: 'bold'
-            }
-            }
-            }
-
+                plugins: {
+                        datalabels: {
+                            display: true,
+                            align: 'end',
+                            anchor: 'center',
+                            formatter: (value, context) => value
+                        }
+                    }
+                },
+            plugins: [ChartDataLabels]
             });
 
             // Line Chart for Mark Share 50-80
@@ -479,47 +482,96 @@
             return item[2];
             });
 
-            // Line Chart
-            var ctx3 = document.getElementById('enrollement_odd_even').getContext('2d');
-            var enrollement_odd_even = new Chart(ctx3, {
-            type: 'bar',
-            data: {
-            labels: markShare50to80Years,
-            datasets: [{
-            label: 'Odd Semester',
-            data: markShare50to80OddSem,
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
-            },
-            {
-            label: 'Even Semester',
-            data: markShare50to80EvenSem,
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-            }]
-            },
-            options: {
-            scales: {
-            yAxes: [{
-            ticks: {
-            beginAtZero: true
-            },
-            scaleLabel: {
-            display: true,
-            labelString: 'Enrollment Counts'
-            }
-            }],
-            xAxes: [{
-            scaleLabel: {
-            display: true,
-            labelString: 'Years'
-            }
-            }]
-            }
-            }
-            });
+            // Set the selected year and semester from Flask variables
+                var selectedYear = "{{ selected_year }}";
+                var selectedSem = "{{ selected_sem }}";
+
+                // Function to update the chart colors
+                function updateChartColors(chart, year, sem) {
+                    chart.data.datasets.forEach((dataset) => {
+                        dataset.backgroundColor = dataset.backgroundColor.map((color, index) => {
+                            if (chart.data.labels[index] == year && dataset.label === sem) {
+                                return color.replace('0.2', '0.5'); // Highlight the selected bar
+                            } else {
+                                return color.replace('0.2', '0.2'); // Keep the original opacity for other bars
+                            }
+                        });
+                        dataset.borderColor = dataset.borderColor.map((color, index) => {
+                            if (chart.data.labels[index] == year && dataset.label === sem) {
+                                return color; // Keep the border color for the selected bar
+                            } else {
+                                return 'rgba(0, 0, 0, 0)'; // Remove the border color for other bars
+                            }
+                        });
+                    });
+                    chart.update();
+                }
+
+                // Initialize the chart
+                var ctx3 = document.getElementById('enrollement_odd_even').getContext('2d');
+                var enrollment_odd_even = new Chart(ctx3, {
+                    type: 'bar',
+                    data: {
+                        labels: markShare50to80Years,
+                        datasets: [{
+                            label: 'odd',
+                            data: markShare50to80OddSem,
+                            backgroundColor: markShare50to80Years.map(() => 'rgba(255, 99, 132, 0.2)'),
+                            borderColor: markShare50to80Years.map(() => 'rgba(255, 99, 132, 1)'),
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'even',
+                            data: markShare50to80EvenSem,
+                            backgroundColor: markShare50to80Years.map(() => 'rgba(54, 162, 235, 0.2)'),
+                            borderColor: markShare50to80Years.map(() => 'rgba(54, 162, 235, 1)'),
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'std count',
+                                    font: {
+                                        family: 'Arial', // Custom font family
+                                        size: 14,       // Custom font size
+                                        weight: '400'  // Custom font weight
+                                    }
+                                }
+                            },
+                            x: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Accademic year',
+                                    font: {
+                                        family: 'Arial', // Custom font family
+                                        size: 14,       // Custom font size
+                                        weight: '400'  // Custom font weight
+                                    }
+                                }
+                            },
+                        },
+                        plugins: {
+                            datalabels: {
+                                display: true,
+                                align: 'end',
+                                anchor: 'end',
+                                formatter: (value, context) => value
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+
+                // Update chart colors if selectedYear and selectedSem are provided
+                if (selectedYear && selectedSem) {
+                    updateChartColors(enrollment_odd_even, selectedYear, selectedSem);
+                }
+
 
             document.getElementById('viewToppersBtn').addEventListener('click', function () {
                 var toppersTable = document.getElementById('toppersTable');
@@ -563,7 +615,7 @@
                 });
                 });
                 });
-
+                
         </script>
     </div>
 </body>

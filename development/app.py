@@ -105,6 +105,8 @@ def general_statistics():
         toppers_data = my_db_connect.getToppersgivenSemandYear(sem_selected,course_selected)
         print('ofvotr',toppers_data)
         context = {
+            'selected_year':course_selected,
+            'selected_sem':sem_selected,
             'acc_year': acc_year,
             'sem_type': sem_type,
             'enrollment_count': enrollment_count,
